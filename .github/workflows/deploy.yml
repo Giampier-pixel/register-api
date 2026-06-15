@@ -1,0 +1,39 @@
+name: Desplegar API a Cloud Run
+
+# Cada push a main reconstruye y redespliega la API en Cloud Run.
+# Autenticación sin llaves vía Workload Identity Federation.
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # necesario para WIF
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Autenticar en Google Cloud (WIF)
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: register-api-499516
+          workload_identity_provider: projects/29708730526/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: github-deployer@register-api-499516.iam.gserviceaccount.com
+
+      - name: Configurar gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Desplegar a Cloud Run
+        run: |
+          gcloud run deploy register-api \
+            --source . \
+            --region southamerica-west1 \
+            --allow-unauthenticated \
+            --memory 1Gi \
+            --min-instances 0 \
+            --max-instances 3 \
+            --quiet
