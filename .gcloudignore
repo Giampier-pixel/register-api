@@ -1,0 +1,15 @@
+# Qué NO subir a Cloud Build al hacer `gcloud run deploy --source .`
+# (el Dockerfile reconstruye node_modules y dist dentro del contenedor).
+.git
+node_modules
+dist
+coverage
+.env
+.env.*
+web
+bruno
+docs
+.vscode
+.claude
+*.log
+*.tsbuildinfo

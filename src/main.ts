@@ -6,7 +6,14 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors();
+  // En producción se restringe a los orígenes de CORS_ORIGIN (coma-separados,
+  // p. ej. la URL de Vercel). Sin esa variable, refleja cualquier origen.
+  const origenes = process.env.CORS_ORIGIN?.split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+  app.enableCors({
+    origin: origenes && origenes.length > 0 ? origenes : true,
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -30,7 +37,8 @@ async function bootstrap() {
     SwaggerModule.createDocument(app, swaggerConfig),
   );
 
-  await app.listen(process.env.PORT ?? 3000);
+  // '0.0.0.0' para que Render (y cualquier contenedor) pueda enrutar al puerto.
+  await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
 }
 
 void bootstrap();
