@@ -5,8 +5,6 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { validateEnv } from './config/env.validation';
 import { FichasModule } from './fichas/fichas.module';
-import { PdfModule } from './pdf/pdf.module';
-import { TarjetasModule } from './tarjetas/tarjetas.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -20,8 +18,6 @@ import { UsersModule } from './users/users.module';
     }),
     AuthModule,
     UsersModule,
-    TarjetasModule,
-    PdfModule,
     FichasModule,
   ],
   controllers: [AppController],
