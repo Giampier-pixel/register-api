@@ -115,4 +115,23 @@ describe('FichasService', () => {
       res.data.every((f) => f.puntajes.categoria === creada.puntajes.categoria),
     ).toBe(true);
   });
+
+  describe('previewPuntaje', () => {
+    it('calcula puntaje/categoría desde datos parciales sin guardar', () => {
+      const r = service.previewPuntaje({
+        edad: 40,
+        gradoInstruccion: GradoInstruccion.ILETRADO, // 5
+        aseguramiento: Aseguramiento.NO, // 5
+      });
+      expect(r.puntajeBasico).toBe(10);
+      expect(r.categoria).toBe(Categoria.A);
+      expect(typeof r.desglose).toBe('object');
+    });
+
+    it('no escribe en la base', async () => {
+      service.previewPuntaje({ edad: 70 });
+      const total = await connection.collection('fichas').countDocuments({});
+      expect(total).toBe(0);
+    });
+  });
 });

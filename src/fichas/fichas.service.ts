@@ -5,6 +5,7 @@ import { FichaSocial, FichaSocialDocument } from './schemas/ficha.schema';
 import { CreateFichaDto } from './dto/create-ficha.dto';
 import { UpdateFichaDto } from './dto/update-ficha.dto';
 import { QueryFichasDto } from './dto/query-fichas.dto';
+import { PreviewPuntajeDto } from './dto/preview-puntaje.dto';
 import { calcularPuntajes, EntradaScoring } from './scoring/scoring';
 import {
   esSoloFecha,
@@ -211,5 +212,24 @@ export class FichasService {
     const ficha = await this.findOne(id);
     ficha.set('activa', true);
     return ficha.save();
+  }
+
+  previewPuntaje(dto: PreviewPuntajeDto) {
+    return calcularPuntajes({
+      edad: dto.edad ?? 0,
+      gradoInstruccion: dto.gradoInstruccion as never,
+      estadoCivil: dto.estadoCivil as never,
+      aseguramiento: dto.aseguramiento as never,
+      condicionOcupacional: dto.condicionOcupacional as never,
+      gradoDependenciaEconomica: dto.gradoDependenciaEconomica as never,
+      tramoIngreso: dto.tramoIngreso as never,
+      tenencia: dto.vivienda?.tenencia as never,
+      materialConstruccion: dto.vivienda?.materialConstruccion as never,
+      nroMiembrosHogar: dto.vivienda?.nroMiembrosHogar ?? 0,
+      nroAmbientesDormir: dto.vivienda?.nroAmbientesDormir ?? 1,
+      serviciosBasicos: dto.vivienda?.serviciosBasicos as never,
+      equipamientoHogar: dto.equipamientoHogar as never,
+      factoresRiesgo: dto.factoresRiesgo ?? [],
+    });
   }
 }

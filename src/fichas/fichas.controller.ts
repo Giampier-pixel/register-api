@@ -14,6 +14,7 @@ import type { AuthenticatedUser } from '../auth/interfaces/jwt-payload.interface
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id.pipe';
 import { CreateFichaDto } from './dto/create-ficha.dto';
+import { PreviewPuntajeDto } from './dto/preview-puntaje.dto';
 import { QueryFichasDto } from './dto/query-fichas.dto';
 import { UpdateFichaDto } from './dto/update-ficha.dto';
 import { FichasService } from './fichas.service';
@@ -33,6 +34,12 @@ export class FichasController {
       id: user.userId,
       nombre: user.nombre,
     });
+  }
+
+  @Post('preview-puntaje')
+  @ApiOperation({ summary: 'Calcula puntaje/categoría sin guardar (preview en vivo)' })
+  previewPuntaje(@Body() dto: PreviewPuntajeDto) {
+    return this.fichasService.previewPuntaje(dto);
   }
 
   @Get()
