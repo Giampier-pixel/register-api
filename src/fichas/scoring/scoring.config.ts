@@ -1,8 +1,16 @@
 // src/fichas/scoring/scoring.config.ts
 import {
-  Aseguramiento, CondicionOcupacional, Categoria, EquipamientoHogar,
-  EstadoCivil, GradoDependenciaEconomica, GradoInstruccion,
-  MaterialConstruccion, ServiciosBasicos, Tenencia, TramoIngreso,
+  Aseguramiento,
+  CondicionOcupacional,
+  Categoria,
+  EquipamientoHogar,
+  EstadoCivil,
+  GradoDependenciaEconomica,
+  GradoInstruccion,
+  MaterialConstruccion,
+  ServiciosBasicos,
+  Tenencia,
+  TramoIngreso,
 } from '../enums/ficha.enums';
 
 export const PESOS = {

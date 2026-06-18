@@ -2,9 +2,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import {
-  Aseguramiento, Categoria, CondicionOcupacional, EquipamientoHogar,
-  EstadoCivil, FactorRiesgo, GradoDependenciaEconomica, GradoInstruccion,
-  MaterialConstruccion, ServiciosBasicos, Tenencia, TramoIngreso,
+  Aseguramiento,
+  Categoria,
+  CondicionOcupacional,
+  EquipamientoHogar,
+  EstadoCivil,
+  FactorRiesgo,
+  GradoDependenciaEconomica,
+  GradoInstruccion,
+  MaterialConstruccion,
+  ServiciosBasicos,
+  Tenencia,
+  TramoIngreso,
 } from '../enums/ficha.enums';
 
 @Schema({ _id: false })
@@ -65,7 +74,8 @@ export class Vivienda {
 export class Puntajes {
   @Prop({ required: true }) puntajeBasico!: number;
   @Prop() puntajeEstudioSocial?: number;
-  @Prop({ type: String, required: true, enum: Categoria }) categoria!: Categoria;
+  @Prop({ type: String, required: true, enum: Categoria })
+  categoria!: Categoria;
 }
 
 export type FichaSocialDocument = HydratedDocument<FichaSocial>;
@@ -89,8 +99,10 @@ export class FichaSocial {
   @Prop({ type: Paciente, required: true }) paciente!: Paciente;
   @Prop({ type: String, required: true, enum: GradoInstruccion })
   gradoInstruccion!: GradoInstruccion;
-  @Prop({ type: String, required: true, enum: EstadoCivil }) estadoCivil!: EstadoCivil;
-  @Prop({ type: String, required: true, enum: Aseguramiento }) aseguramiento!: Aseguramiento;
+  @Prop({ type: String, required: true, enum: EstadoCivil })
+  estadoCivil!: EstadoCivil;
+  @Prop({ type: String, required: true, enum: Aseguramiento })
+  aseguramiento!: Aseguramiento;
   @Prop({ trim: true }) aseguramientoOtro?: string;
 
   @Prop({ trim: true }) ocupacion?: string;
@@ -100,25 +112,29 @@ export class FichaSocial {
   @Prop({ trim: true }) telefono?: string;
   @Prop({ type: PersonaAcompana }) personaAcompana?: PersonaAcompana;
 
-  @Prop({ type: [MiembroFamiliar], default: [] }) composicionFamiliar!: MiembroFamiliar[];
+  @Prop({ type: [MiembroFamiliar], default: [] })
+  composicionFamiliar!: MiembroFamiliar[];
   @Prop({ type: String, required: true, enum: GradoDependenciaEconomica })
   gradoDependenciaEconomica!: GradoDependenciaEconomica;
 
   @Prop({ type: IngresosGastos }) ingresosGastos?: IngresosGastos;
-  @Prop({ type: String, required: true, enum: TramoIngreso }) tramoIngreso!: TramoIngreso;
+  @Prop({ type: String, required: true, enum: TramoIngreso })
+  tramoIngreso!: TramoIngreso;
 
   @Prop({ type: Vivienda, required: true }) vivienda!: Vivienda;
   @Prop({ type: String, required: true, enum: EquipamientoHogar })
   equipamientoHogar!: EquipamientoHogar;
 
   @Prop({ trim: true }) factoresRiesgoTexto?: string;
-  @Prop({ type: [String], enum: FactorRiesgo, default: [] }) factoresRiesgo!: FactorRiesgo[];
+  @Prop({ type: [String], enum: FactorRiesgo, default: [] })
+  factoresRiesgo!: FactorRiesgo[];
 
   @Prop({ type: Puntajes, required: true }) puntajes!: Puntajes;
 
   @Prop({ required: true, trim: true }) trabajadoraSocial!: string;
   @Prop({ required: true }) fechaInscripcion!: Date;
-  @Prop({ type: Types.ObjectId, ref: 'User', required: true }) creadoPor!: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  creadoPor!: Types.ObjectId;
   @Prop({ type: Types.ObjectId, ref: 'User' }) actualizadoPor?: Types.ObjectId;
   @Prop({ default: true }) activa!: boolean;
 }

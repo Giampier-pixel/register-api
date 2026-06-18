@@ -1,13 +1,31 @@
 // src/fichas/dto/create-ficha.dto.ts
 import { Type, Transform } from 'class-transformer';
 import {
-  IsArray, IsBoolean, IsDate, IsEnum, IsInt, IsNumber, IsOptional,
-  IsString, Max, Min, MinLength, ValidateNested,
+  IsArray,
+  IsBoolean,
+  IsDate,
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+  MinLength,
+  ValidateNested,
 } from 'class-validator';
 import {
-  Aseguramiento, CondicionOcupacional, EquipamientoHogar, EstadoCivil,
-  FactorRiesgo, GradoDependenciaEconomica, GradoInstruccion,
-  MaterialConstruccion, ServiciosBasicos, Tenencia, TramoIngreso,
+  Aseguramiento,
+  CondicionOcupacional,
+  EquipamientoHogar,
+  EstadoCivil,
+  FactorRiesgo,
+  GradoDependenciaEconomica,
+  GradoInstruccion,
+  MaterialConstruccion,
+  ServiciosBasicos,
+  Tenencia,
+  TramoIngreso,
 } from '../enums/ficha.enums';
 import { inicioDeDia } from '../fichas.utils';
 
@@ -18,8 +36,11 @@ class PacienteDto {
   @IsOptional() @IsString() nroHistoriaClinica?: string;
   @IsString() @MinLength(1) procedencia!: string;
   @IsString() @MinLength(1) lugarNacimiento!: string;
-  @Transform(({ value }) => (typeof value === 'string' ? inicioDeDia(value) : (value as Date)))
-  @IsDate() fechaNacimiento!: Date;
+  @Transform(({ value }) =>
+    typeof value === 'string' ? inicioDeDia(value) : (value as Date),
+  )
+  @IsDate()
+  fechaNacimiento!: Date;
   @IsInt() @Min(0) @Max(130) edad!: number;
 }
 
@@ -73,14 +94,22 @@ export class CreateFichaDto {
   @IsEnum(CondicionOcupacional) condicionOcupacional!: CondicionOcupacional;
   @IsOptional() @IsString() direccion?: string;
   @IsOptional() @IsString() telefono?: string;
-  @IsOptional() @ValidateNested() @Type(() => PersonaAcompanaDto)
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => PersonaAcompanaDto)
   personaAcompana?: PersonaAcompanaDto;
 
-  @IsOptional() @IsArray() @ValidateNested({ each: true }) @Type(() => MiembroFamiliarDto)
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => MiembroFamiliarDto)
   composicionFamiliar?: MiembroFamiliarDto[];
-  @IsEnum(GradoDependenciaEconomica) gradoDependenciaEconomica!: GradoDependenciaEconomica;
+  @IsEnum(GradoDependenciaEconomica)
+  gradoDependenciaEconomica!: GradoDependenciaEconomica;
 
-  @IsOptional() @ValidateNested() @Type(() => IngresosGastosDto)
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => IngresosGastosDto)
   ingresosGastos?: IngresosGastosDto;
   @IsEnum(TramoIngreso) tramoIngreso!: TramoIngreso;
 
@@ -88,7 +117,9 @@ export class CreateFichaDto {
   @IsEnum(EquipamientoHogar) equipamientoHogar!: EquipamientoHogar;
 
   @IsOptional() @IsString() factoresRiesgoTexto?: string;
-  @IsOptional() @IsArray() @IsEnum(FactorRiesgo, { each: true })
+  @IsOptional()
+  @IsArray()
+  @IsEnum(FactorRiesgo, { each: true })
   factoresRiesgo?: FactorRiesgo[];
 
   @IsOptional() @IsNumber() puntajeEstudioSocial?: number;

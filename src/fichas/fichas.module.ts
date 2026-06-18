@@ -5,7 +5,11 @@ import { FichasService } from './fichas.service';
 import { FichasController } from './fichas.controller';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: FichaSocial.name, schema: FichaSocialSchema }])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: FichaSocial.name, schema: FichaSocialSchema },
+    ]),
+  ],
   controllers: [FichasController],
   providers: [FichasService],
 })

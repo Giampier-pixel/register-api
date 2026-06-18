@@ -1,12 +1,25 @@
 import {
-  tramoEdadPeso, tramoHacinamientoPeso, tramoRiesgoPeso,
-  sugerirTramoIngreso, categoriaDesdePuntaje, calcularPuntajes,
+  tramoEdadPeso,
+  tramoHacinamientoPeso,
+  tramoRiesgoPeso,
+  sugerirTramoIngreso,
+  categoriaDesdePuntaje,
+  calcularPuntajes,
   EntradaScoring,
 } from './scoring';
 import {
-  Aseguramiento, CondicionOcupacional, Categoria, EquipamientoHogar,
-  EstadoCivil, FactorRiesgo, GradoDependenciaEconomica, GradoInstruccion,
-  MaterialConstruccion, ServiciosBasicos, Tenencia, TramoIngreso,
+  Aseguramiento,
+  CondicionOcupacional,
+  Categoria,
+  EquipamientoHogar,
+  EstadoCivil,
+  FactorRiesgo,
+  GradoDependenciaEconomica,
+  GradoInstruccion,
+  MaterialConstruccion,
+  ServiciosBasicos,
+  Tenencia,
+  TramoIngreso,
 } from '../enums/ficha.enums';
 
 describe('tramos derivados', () => {

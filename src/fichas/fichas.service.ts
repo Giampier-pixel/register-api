@@ -6,7 +6,12 @@ import { CreateFichaDto } from './dto/create-ficha.dto';
 import { UpdateFichaDto } from './dto/update-ficha.dto';
 import { QueryFichasDto } from './dto/query-fichas.dto';
 import { calcularPuntajes, EntradaScoring } from './scoring/scoring';
-import { esSoloFecha, inicioDeDia, finDeDia, regexInsensibleAcentos } from './fichas.utils';
+import {
+  esSoloFecha,
+  inicioDeDia,
+  finDeDia,
+  regexInsensibleAcentos,
+} from './fichas.utils';
 
 export interface UsuarioActual {
   id: string;
@@ -39,7 +44,8 @@ type EntradaScoringSource = Pick<
 @Injectable()
 export class FichasService {
   constructor(
-    @InjectModel(FichaSocial.name) private readonly model: Model<FichaSocialDocument>,
+    @InjectModel(FichaSocial.name)
+    private readonly model: Model<FichaSocialDocument>,
     @InjectConnection() private readonly connection: Connection,
   ) {}
 
@@ -66,7 +72,7 @@ export class FichasService {
     const counter = await this.connection
       .collection<{ _id: string; seq: number }>('counters')
       .findOneAndUpdate(
-        { _id: SECUENCIA } as Record<string, unknown>,
+        { _id: SECUENCIA },
         { $inc: { seq: 1 } },
         { upsert: true, returnDocument: 'after' },
       );
@@ -74,8 +80,13 @@ export class FichasService {
     return (counter as { seq: number }).seq;
   }
 
-  async create(dto: CreateFichaDto, usuario: UsuarioActual): Promise<FichaSocialDocument> {
-    const { puntajeBasico, categoria } = calcularPuntajes(this.buildEntradaScoring(dto));
+  async create(
+    dto: CreateFichaDto,
+    usuario: UsuarioActual,
+  ): Promise<FichaSocialDocument> {
+    const { puntajeBasico, categoria } = calcularPuntajes(
+      this.buildEntradaScoring(dto),
+    );
     const ficha = new this.model({
       ...dto,
       nroFichaSocial: await this.siguienteFolio(),
@@ -177,12 +188,13 @@ export class FichasService {
     }
 
     const { puntajeBasico, categoria } = calcularPuntajes(
-      this.buildEntradaScoring(ficha as unknown as EntradaScoringSource),
+      this.buildEntradaScoring(ficha),
     );
     ficha.set('puntajes', {
       puntajeBasico,
       categoria,
-      puntajeEstudioSocial: dto.puntajeEstudioSocial ?? ficha.puntajes?.puntajeEstudioSocial,
+      puntajeEstudioSocial:
+        dto.puntajeEstudioSocial ?? ficha.puntajes?.puntajeEstudioSocial,
     });
     ficha.set('actualizadoPor', new Types.ObjectId(usuario.id));
 

@@ -5,17 +5,29 @@ import { Connection, Types } from 'mongoose';
 import { FichasService } from './fichas.service';
 import { FichaSocial, FichaSocialSchema } from './schemas/ficha.schema';
 import {
-  Aseguramiento, CondicionOcupacional, Categoria, EquipamientoHogar, EstadoCivil,
-  GradoDependenciaEconomica, GradoInstruccion, MaterialConstruccion,
-  ServiciosBasicos, Tenencia, TramoIngreso,
+  Aseguramiento,
+  CondicionOcupacional,
+  Categoria,
+  EquipamientoHogar,
+  EstadoCivil,
+  GradoDependenciaEconomica,
+  GradoInstruccion,
+  MaterialConstruccion,
+  ServiciosBasicos,
+  Tenencia,
+  TramoIngreso,
 } from './enums/ficha.enums';
 import { CreateFichaDto } from './dto/create-ficha.dto';
 
 const dto = (): CreateFichaDto => ({
   paciente: {
-    apellidoPaterno: 'Pérez', apellidoMaterno: 'Huamán', nombres: 'Juan',
-    procedencia: 'Huancayo', lugarNacimiento: 'Huancayo',
-    fechaNacimiento: new Date('1980-01-01T05:00:00.000Z'), edad: 46,
+    apellidoPaterno: 'Pérez',
+    apellidoMaterno: 'Huamán',
+    nombres: 'Juan',
+    procedencia: 'Huancayo',
+    lugarNacimiento: 'Huancayo',
+    fechaNacimiento: new Date('1980-01-01T05:00:00.000Z'),
+    edad: 46,
   },
   gradoInstruccion: GradoInstruccion.SECUNDARIA,
   estadoCivil: EstadoCivil.SOLTERO,
@@ -24,8 +36,11 @@ const dto = (): CreateFichaDto => ({
   gradoDependenciaEconomica: GradoDependenciaEconomica.HASTA_3,
   tramoIngreso: TramoIngreso.MENOS_1_SMV,
   vivienda: {
-    tenencia: Tenencia.PROPIA, materialConstruccion: MaterialConstruccion.RUSTICO,
-    nroMiembrosHogar: 1, nroAmbientesDormir: 1, serviciosBasicos: ServiciosBasicos.PARCIAL,
+    tenencia: Tenencia.PROPIA,
+    materialConstruccion: MaterialConstruccion.RUSTICO,
+    nroMiembrosHogar: 1,
+    nroAmbientesDormir: 1,
+    serviciosBasicos: ServiciosBasicos.PARCIAL,
   },
   equipamientoHogar: EquipamientoHogar.DE_1_A_2,
   factoresRiesgo: [],
@@ -42,7 +57,9 @@ describe('FichasService', () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
         MongooseModule.forRoot(mongod.getUri()),
-        MongooseModule.forFeature([{ name: FichaSocial.name, schema: FichaSocialSchema }]),
+        MongooseModule.forFeature([
+          { name: FichaSocial.name, schema: FichaSocialSchema },
+        ]),
       ],
       providers: [FichasService],
     }).compile();
@@ -78,7 +95,7 @@ describe('FichasService', () => {
     const ficha = await service.create(dto(), usuario);
     const antes = ficha.puntajes.puntajeBasico;
     const editada = await service.update(
-      ficha.id as string,
+      ficha.id,
       { gradoInstruccion: GradoInstruccion.ILETRADO }, // peso 5 (antes 3)
       usuario,
     );
@@ -89,9 +106,13 @@ describe('FichasService', () => {
     await service.create(dto(), usuario);
     const creada = await service.create(dto(), usuario);
     const res = await service.findAll({
-      categoria: creada.puntajes.categoria, page: 1, limit: 10,
+      categoria: creada.puntajes.categoria,
+      page: 1,
+      limit: 10,
     });
     expect(res.meta.total).toBeGreaterThanOrEqual(1);
-    expect(res.data.every((f) => f.puntajes.categoria === creada.puntajes.categoria)).toBe(true);
+    expect(
+      res.data.every((f) => f.puntajes.categoria === creada.puntajes.categoria),
+    ).toBe(true);
   });
 });

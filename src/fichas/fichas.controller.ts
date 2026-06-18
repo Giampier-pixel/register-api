@@ -25,12 +25,14 @@ export class FichasController {
   constructor(private readonly fichasService: FichasService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Registrar ficha social; asigna folio y asistente social' })
-  create(
-    @Body() dto: CreateFichaDto,
-    @CurrentUser() user: AuthenticatedUser,
-  ) {
-    return this.fichasService.create(dto, { id: user.userId, nombre: user.nombre });
+  @ApiOperation({
+    summary: 'Registrar ficha social; asigna folio y asistente social',
+  })
+  create(@Body() dto: CreateFichaDto, @CurrentUser() user: AuthenticatedUser) {
+    return this.fichasService.create(dto, {
+      id: user.userId,
+      nombre: user.nombre,
+    });
   }
 
   @Get()
@@ -52,7 +54,10 @@ export class FichasController {
     @Body() dto: UpdateFichaDto,
     @CurrentUser() user: AuthenticatedUser,
   ) {
-    return this.fichasService.update(id, dto, { id: user.userId, nombre: user.nombre });
+    return this.fichasService.update(id, dto, {
+      id: user.userId,
+      nombre: user.nombre,
+    });
   }
 
   @Delete(':id')
@@ -69,7 +74,7 @@ export class FichasController {
 
   @Get(':id/pdf')
   @ApiOperation({ summary: 'Generar PDF de ficha social (sub-proyecto 3)' })
-  pdf(@Param('id', ParseObjectIdPipe) _id: string) {
+  pdf() {
     throw new NotImplementedException('PDF en construcción (sub-proyecto 3)');
   }
 }
