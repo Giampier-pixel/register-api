@@ -4,8 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { validateEnv } from './config/env.validation';
-import { PdfModule } from './pdf/pdf.module';
-import { TarjetasModule } from './tarjetas/tarjetas.module';
+import { FichasModule } from './fichas/fichas.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -19,8 +18,7 @@ import { UsersModule } from './users/users.module';
     }),
     AuthModule,
     UsersModule,
-    TarjetasModule,
-    PdfModule,
+    FichasModule,
   ],
   controllers: [AppController],
 })

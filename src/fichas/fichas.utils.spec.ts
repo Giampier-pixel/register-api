@@ -5,7 +5,7 @@ import {
   finDeDia,
   inicioDeDia,
   regexInsensibleAcentos,
-} from './tarjetas.utils';
+} from './fichas.utils';
 
 describe('calcularEdad', () => {
   beforeAll(() => {
