@@ -3,16 +3,18 @@ import {
   Controller,
   Delete,
   Get,
-  NotImplementedException,
+  Header,
   Param,
   Patch,
   Post,
   Query,
+  StreamableFile,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { AuthenticatedUser } from '../auth/interfaces/jwt-payload.interface';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id.pipe';
+import { generarFichaPdf } from '../pdf/ficha-pdf';
 import { CreateFichaDto } from './dto/create-ficha.dto';
 import { PreviewPuntajeDto } from './dto/preview-puntaje.dto';
 import { QueryFichasDto } from './dto/query-fichas.dto';
@@ -80,8 +82,20 @@ export class FichasController {
   }
 
   @Get(':id/pdf')
-  @ApiOperation({ summary: 'Generar PDF de ficha social (sub-proyecto 3)' })
-  pdf() {
-    throw new NotImplementedException('PDF en construcción (sub-proyecto 3)');
+  @ApiOperation({
+    summary: 'Generar el PDF de la ficha social (fiel al formato oficial)',
+  })
+  @Header('Content-Type', 'application/pdf')
+  async pdf(
+    @Param('id', ParseObjectIdPipe) id: string,
+  ): Promise<StreamableFile> {
+    const ficha = await this.fichasService.findOne(id);
+    const bytes = await generarFichaPdf(
+      ficha as unknown as Parameters<typeof generarFichaPdf>[0],
+    );
+    return new StreamableFile(Buffer.from(bytes), {
+      type: 'application/pdf',
+      disposition: `inline; filename="ficha-${ficha.nroFichaSocial}.pdf"`,
+    });
   }
 }

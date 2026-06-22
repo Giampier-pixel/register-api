@@ -57,7 +57,7 @@ class Lienzo {
   opcion(x: number, yTop: number, label: string, marcada: boolean, peso?: number): number {
     this.texto(x, yTop, label);
     const bx = x + this.font.widthOfTextAtSize(label, 8) + 4;
-    this.caja(bx, yTop - 6.5, 8, 8);
+    this.caja(bx, yTop + 0.5, 8, 8);
     if (marcada) this.texto(bx + 1, yTop, 'X', { bold: true });
     let fin = bx + 11;
     if (peso !== undefined) { this.texto(fin, yTop, `(${peso})`); fin += this.font.widthOfTextAtSize(`(${peso})`, 8) + 4; }
@@ -116,7 +116,7 @@ export async function generarFichaPdf(f: FichaLike): Promise<Uint8Array> {
   L.opcion(390, y + 11, 'EsSalud', f.aseguramiento === 'EsSalud');
   L.opcion(390, y + 22, 'Otro', f.aseguramiento === 'Otro');
   L.campo(390, y + 36, 'Procedencia:', f.paciente.procedencia, 120);
-  y += 5 * 11 + 6;
+  y += 5 * 11 + 2;
 
   // Ocupación
   L.campo(M, y, 'Ocupación:', f.ocupacion, 150); y += 12;
@@ -138,8 +138,8 @@ export async function generarFichaPdf(f: FichaLike): Promise<Uint8Array> {
     ['Es asegurado', 50], ['Ocupación', 65], ['Ingreso', 45], ['Observaciones', 60],
   ];
   const anchoTablaFam = colsFam.reduce((s, [, w]) => s + w, 0);
-  const filaAltoFam = 12;
-  const filasMinFam = 6;
+  const filaAltoFam = 11;
+  const filasMinFam = 5;
   const filasFam = Math.max(filasMinFam, f.composicionFamiliar.length);
 
   const dibujarCabeceraFam = (yy: number) => {
@@ -214,7 +214,7 @@ export async function generarFichaPdf(f: FichaLike): Promise<Uint8Array> {
   ten.forEach(([lab, p], i) => L.opcion(M, y + i * 11, lab, f.vivienda.tenencia === lab, p));
   const mat: [string, number][] = [['Noble/Acabado',1],['Noble sin acabar',2],['Mixto',3],['Rústico',4],['Precario',5]];
   mat.forEach(([lab, p], i) => L.opcion(220, y + i * 11, lab, f.vivienda.materialConstruccion === lab, p));
-  y += 5 * 11 + 6;
+  y += 5 * 11 + 2;
 
   L.campo(M, y, 'Nº Miembros del Hogar:', f.vivienda.nroMiembrosHogar, 30);
   L.campo(M + 190, y, 'Nº Ambientes para Dormir:', f.vivienda.nroAmbientesDormir, 30);
@@ -258,7 +258,7 @@ export async function generarFichaPdf(f: FichaLike): Promise<Uint8Array> {
   L.opcion(M, y, 'Sin Riesgo', nRiesgos === 0, 0);
   L.opcion(M + 130, y, '1 a 2 Riesgos', nRiesgos >= 1 && nRiesgos <= 2, 3);
   L.opcion(M + 280, y, '3 a más', nRiesgos >= 3, 5);
-  y += 18;
+  y += 12;
 
   // ---- CIERRE: Puntaje / Categoría / Fecha / Firma ----
   if (y > A4.h - 90) {
@@ -266,18 +266,18 @@ export async function generarFichaPdf(f: FichaLike): Promise<Uint8Array> {
     L = new Lienzo(page, font, bold);
     y = 34;
   }
-  L.linea(M, y, A4.w - M); y += 14;
+  L.linea(M, y, A4.w - M); y += 12;
   L.campo(M, y, 'Puntaje Básico:', f.puntajes.puntajeBasico, 40);
   L.campo(M + 160, y, 'Puntaje c/ Estudio Social:', f.puntajes.puntajeEstudioSocial ?? '', 40);
-  y += 14;
+  y += 13;
 
   L.texto(M, y, 'Categorización:', { bold: true });
   const categorias = ['A', 'B', 'C', 'Z'];
   categorias.forEach((cat, i) => L.opcion(M + 90 + i * 40, y, cat, f.puntajes.categoria === cat));
-  y += 16;
+  y += 15;
 
-  L.campo(M, y, 'Fecha:', fmtFecha(f.fechaInscripcion), 80); y += 16;
-  L.campo(M, y, 'Trabajadora Social ó Asistente Profesional, Nombre:', f.trabajadoraSocial, 150); y += 20;
+  L.campo(M, y, 'Fecha:', fmtFecha(f.fechaInscripcion), 80); y += 14;
+  L.campo(M, y, 'Trabajadora Social ó Asistente Profesional, Nombre:', f.trabajadoraSocial, 150); y += 18;
   L.texto(M, y, 'Firma: ____________________________');
 
   const bytes = await doc.save();
