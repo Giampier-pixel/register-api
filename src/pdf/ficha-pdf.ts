@@ -46,12 +46,11 @@ class Lienzo {
   caja(x: number, yTop: number, w: number, h: number) {
     this.page.drawRectangle({ x, y: this.Y(yTop) - h, width: w, height: h, borderColor: NEGRO, borderWidth: 0.6 });
   }
-  // etiqueta + valor con línea de subrayado: "Label: valor______"
-  campo(x: number, yTop: number, label: string, valor: string | number | undefined, anchoLinea: number) {
+  // etiqueta + valor: "Label: valor" (sin línea guía; el dato va impreso)
+  campo(x: number, yTop: number, label: string, valor: string | number | undefined, _anchoLinea: number) {
     this.texto(x, yTop, label, { bold: true });
     const lx = x + this.bold.widthOfTextAtSize(label, 8) + 3;
     this.texto(lx, yTop, valor != null ? String(valor) : '');
-    this.linea(lx, yTop + 1.5, lx + anchoLinea);
   }
   // opción tipo "Label ( ) ②" con ✕ si marcada
   opcion(x: number, yTop: number, label: string, marcada: boolean, peso?: number): number {
@@ -144,7 +143,7 @@ export async function generarFichaPdf(f: FichaLike): Promise<Uint8Array> {
 
   const dibujarCabeceraFam = (yy: number) => {
     let cx = M;
-    colsFam.forEach(([lab, w]) => { L.texto(cx + 2, yy + 8, lab, { bold: true, size: 7 }); cx += w; });
+    colsFam.forEach(([lab, w]) => { L.texto(cx + 2, yy + 2, lab, { bold: true, size: 7 }); cx += w; });
     L.caja(M, yy, anchoTablaFam, filaAltoFam);
     return yy + filaAltoFam;
   };
@@ -155,7 +154,7 @@ export async function generarFichaPdf(f: FichaLike): Promise<Uint8Array> {
       m?.gradoInstruccion ?? '', m ? (m.esAsegurado ? 'Sí' : 'No') : '', m?.ocupacion ?? '',
       m?.ingreso != null ? String(m.ingreso) : '', m?.observaciones ?? '',
     ];
-    colsFam.forEach(([, w], i) => { L.texto(cx + 2, yy + 8, valores[i], { size: 7 }); cx += w; });
+    colsFam.forEach(([, w], i) => { L.texto(cx + 2, yy + 2, valores[i], { size: 7 }); cx += w; });
     L.caja(M, yy, anchoTablaFam, filaAltoFam);
     return yy + filaAltoFam;
   };
